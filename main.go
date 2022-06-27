@@ -1,11 +1,11 @@
 package main
 
 import (
-		  "fmt"
 		  "os"
 		  "log"
 
 		  "texplore/ascii"
+		  "texplore/voodoo"
 )
 
 func openFile(filename string) []byte{
@@ -23,9 +23,9 @@ func openFile(filename string) []byte{
 func main() {
 		  text := openFile("alice.txt")
 		  charOcc := texploreASCII.CountBis(text)
-		  fmt.Println(charOcc)
 		  bits, occs := texploreASCII.SortMap(charOcc)
-
+		  biReps := texploreVoodoo.BigramEval(bits, occs, texploreVoodoo.Keymap1)
+		  finger, repets := texploreASCII.SortMap(biReps)
 		  
-		  texploreASCII.PrintSlicepair(bits, occs)
+		  texploreASCII.PrintSlicepair(finger, repets)
 }
