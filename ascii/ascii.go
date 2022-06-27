@@ -5,7 +5,15 @@ import(
 )
 
 /*--- ASCII Enconded Text ---*/
+
+
+type Slicepair struct {
+		  Blocks []string
+		  Occurences []int
+}
+
 /*---ASCII Text Options---*/
+
 var whitespaceMap = map[byte]string {
 		  9: "[tab]",
 		  10: "[line-feed]",
@@ -59,7 +67,7 @@ func CountChars(text []byte) map[string]int {
 		  length := len(text)
 
 		  for i := 0; i < length; i++ {
-					 char := PrintASCII(text[i])
+					 char := string(text[i])
 					 frequencyMapAppend(collect, char)
 		  }
 		  return collect
@@ -70,7 +78,7 @@ func CountBis(text []byte) map[string]int {
 		  length := len(text) - 1 // Currently ignoring the final character
 
 		  for i := 0; i < length; i++ {
-					 bigram := PrintASCII(text[i]) + PrintASCII(text[i + 1])
+					 bigram := string(text[i]) + string(text[i + 1])
 					 frequencyMapAppend(collect, bigram)
 		  }
 		  return collect
@@ -96,10 +104,11 @@ func CountWords(text []byte) map[string]int {
 
 /*--- Print formating ---*/
 
-func mirrorSort(elems []string, nums []int) ([]string, []int) {
-//		  if len(elems) != len(nums) {
-//					 return _, _, err
-//		  }
+func mirrorSort(unsortedPair Slicepair) Slicepair {
+
+		  nums := unsortedPair.Occurences
+		  elems := unsortedPair.Blocks
+
 		  length := len(nums)
 		  sortedElems := make([]string, length)
 		  sortedNums := make([]int, length)
@@ -121,10 +130,13 @@ func mirrorSort(elems []string, nums []int) ([]string, []int) {
 
 					 nums[index] = -1
 		  }
-		  return sortedElems, sortedNums
+		  
+		  pair := Slicepair{Blocks: sortedElems, Occurences: sortedNums}
+
+		  return pair
 }
 
-func SortMap(collect map[string]int) ([]string, []int) {
+func SortMap(collect map[string]int) Slicepair {
 		  // split the map into matching slices
 		  length := len(collect)
 		  textKey := make([]string, length)
@@ -138,12 +150,16 @@ func SortMap(collect map[string]int) ([]string, []int) {
 		  }
 
 		  // mirror sort the slices
-		  textKey, occurs = mirrorSort(textKey, occurs)
+		  sortedPair := Slicepair{Blocks: textKey, Occurences: occurs}
+		  sortedPair = mirrorSort(sortedPair)
 
-		  return textKey, occurs
+		  return sortedPair
 }
 
-func PrintSlicepair(text []string, occ []int) {
+func PrintSlicepair(pair Slicepair) {
+		  text := pair.Blocks
+		  occ := pair.Occurences
+
 		  length := len(occ)
 		  for i := 0; i < length; i++ {
 					 fmt.Printf(":::  %s -> %d\n", text[i], occ[i])

@@ -23,9 +23,10 @@ func openFile(filename string) []byte{
 func main() {
 		  text := openFile("alice.txt")
 		  charOcc := texploreASCII.CountBis(text)
-		  bits, occs := texploreASCII.SortMap(charOcc)
-		  biReps := texploreVoodoo.BigramEval(bits, occs, texploreVoodoo.Keymap1)
-		  finger, repets := texploreASCII.SortMap(biReps)
+		  bigramPair := texploreASCII.SortMap(charOcc)
+		  biReps := texploreVoodoo.BigramEval(bigramPair, texploreVoodoo.Keymap2)
+		  fingerRep:= texploreASCII.SortMap(biReps)
 		  
-		  texploreASCII.PrintSlicepair(finger, repets)
+		  //texploreASCII.PrintSlicepair(bits, occs)
+		  texploreASCII.PrintSlicepair(fingerRep)
 }
