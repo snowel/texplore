@@ -5,7 +5,7 @@ import (
 		  "os"
 		  "log"
 
-		  "test/texplore/ascii/ascii.go"
+		  "texplore/ascii"
 )
 
 func openFile(filename string) []byte{
@@ -22,10 +22,10 @@ func openFile(filename string) []byte{
 
 func main() {
 		  text := openFile("alice.txt")
-		  charOcc := CountBis(text)
+		  charOcc := texploreASCII.CountBis(text)
 		  fmt.Println(charOcc)
-		  bits, occs := SortMap(charOcc)
+		  bits, occs := texploreASCII.SortMap(charOcc)
 
 		  
-		  printMap(bits, occs)
+		  texploreASCII.PrintSlicepair(bits, occs)
 }

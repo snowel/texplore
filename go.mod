@@ -1,3 +1,3 @@
-module test/texplore
+module texplore
 
 go 1.18
