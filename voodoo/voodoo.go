@@ -51,7 +51,51 @@ var (
 )
 
 // procedurally genreated keymaps
-//var L1charPool = []string{"u", "f", "c", "d", "h", " ", "l", "w" }
+
+var L1charPool = []string{"u", "f", "c", "d", "h", " ", "l", "w" }
+
+// generates all the maps of a voodoo map, one row is fixed, the other is permuted
+func fixedRowPermRow(fixedMap map[string][]string, permutations *[][]string, nPerms int) *[]map[string][]string {
+		  var allMyMaps []map[string][]string
+
+		  for i := 0; i < nPerms; i++ {
+
+					 thisMap := fixedMap
+
+					 thisMap["Right-Index"] = append(thisMap["Right-Index"], permutations[i])
+					 thisMap["Right-Middle"] = append(thisMap["Right-Middle"], permutations[i])
+					 thisMap["Right-Ring"] = append(thisMap["Right-Ring"], permutations[i])
+					 thisMap["Right-Pinky"] = append(thisMap["Right-Pinky"], permutations[i])
+					 thisMap["Left-Index"] = append(thisMap["Left-Index"], permutations[i])
+					 thisMap["Left-Middle"] = append(thisMap["Left-Middle"], permutations[i])
+					 thisMap["Left-Ring"] = append(thisMap["Left-Ring"], permutations[i])
+					 thisMap["Left-Pinky"] = append(thisMap["Left-Pinky"], permutations[i])
+
+					 *allMyMaps = append(*allMyMaps, thisMap)
+		  }
+
+}
+
+func Heaps(k int, arr []string, permutations *[][]string) {
+		  if k == 1 {
+					 fmt.Println(arr)
+					 *permutations = append(*permutations, arr)
+		  } else {
+					 swap := reflect.Swapper(arr)
+					 Heaps(k - 1, arr, permutations)
+					 
+					 for i := 0; i < k - 1; i++ {
+								if k % 2 == 0 {
+										  swap(i, k - 1)
+								} else {
+										  swap(0, k - 1)
+								}
+
+								Heaps(k - 1, arr, permutations)
+					 }
+		  }
+}
+
 
 // Check if any of the strings(keys) the finger is reponsible for appear in the block
 func fingerUse(block string, fingerMap []string) int {
@@ -68,7 +112,7 @@ func fingerUse(block string, fingerMap []string) int {
 }
 
 
-// Takes a slice pair TODO struct of slice pairs, and retruns a map of how frequently one finger is used is a given block
+// Takes a slice pair and retruns a map of how frequently one finger is used is a given block
 // if it's a bigram it same finger rpetition
 // chracter slice is finger use frentchecy
 func BigramEval(pair texploreASCII.Slicepair, keymap map[string][]string) map[string]int {
