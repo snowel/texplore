@@ -1,7 +1,7 @@
 package texploreVoodoo
 
 /*--- This is a package for testing voodoo layouts.
-		  -repeating single finger sure
+		  repeating single finger use 
 		  repeating same hand use
 		  etc ---*/
 
@@ -11,6 +11,7 @@ package texploreVoodoo
 import (
 		  "strings"
 		  "texplore/ascii"
+		 // "reflect"
 )
 
 var (
@@ -51,12 +52,17 @@ var (
 )
 
 // procedurally genreated keymaps
-
+/*
 var L1charPool = []string{"u", "f", "c", "d", "h", " ", "l", "w" }
 
 // generates all the maps of a voodoo map, one row is fixed, the other is permuted
-func fixedRowPermRow(fixedMap map[string][]string, permutations *[][]string, nPerms int) *[]map[string][]string {
+func fixedRowPermRow(fixedMap map[string][]string, permMap map[string][]string) *[]map[string][]string {
+		  var permutations [][]string
 		  var allMyMaps []map[string][]string
+
+		  Heaps(8, permMap, &permutations) // poppulated the permutaitons
+//TODO aliase row_length = 8
+		  nPerms := len(permutations) // determine how many varaints we have
 
 		  for i := 0; i < nPerms; i++ {
 
@@ -73,6 +79,8 @@ func fixedRowPermRow(fixedMap map[string][]string, permutations *[][]string, nPe
 
 					 *allMyMaps = append(*allMyMaps, thisMap)
 		  }
+
+		  return &allMyMaps
 
 }
 
@@ -95,7 +103,7 @@ func Heaps(k int, arr []string, permutations *[][]string) {
 					 }
 		  }
 }
-
+*/
 
 // Check if any of the strings(keys) the finger is reponsible for appear in the block
 func fingerUse(block string, fingerMap []string) int {
