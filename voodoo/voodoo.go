@@ -49,6 +49,16 @@ var (
 					 "Left-Pinky": {"a", "A", "u", "U", "q", "Q", "z", "Z"},
 
 		  }
+		  Keymap4 = map[string][]string{
+					 "Right-Index": {"n", "N", "h", "H", "p", "P", "m", "M"},
+					 "Right-Middle": {"e", "E", "y", ";", ":", ","},
+					 "Right-Ring": {"i", "I", "l", "L", ".", "'", "\""},
+					 "Right-Pinky": {"o", "O", "w", "W", "x", "X"},
+					 "Left-Index": {"t", "T", "d", "D", "b", "B", "g", "G"},
+					 "Left-Middle": {"r", "R", "y", "Y", "v", "V", "c", "C"},
+					 "Left-Ring": {"s", "S", "f", "F", "k", "K", "j", "J"},
+					 "Left-Pinky": {"a", "A", "u", "U", "q", "Q", "z", "Z"},
+
 )
 
 // procedurally genreated keymaps

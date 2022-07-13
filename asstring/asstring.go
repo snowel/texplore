@@ -1,53 +1,18 @@
-package texploreASCII
+package asstring
 
-import(
+import (
 		  "fmt"
-
-		  dataformat "texplore/dataformat"
 )
 
-/*--- ASCII Enconded Text ---*/
-
-
-
-/*---ASCII Text Options---*/
-
-var whitespaceMap = map[byte]string {
-		  9: "[tab]",
-		  10: "[line-feed]",
-		  32: "[space]",
+type Slicepair struct {
+		  Blocks []string
+		  Occurences []int
 }
 
-// Takes a byte and returns a printalble represesntations of the ascii requivalent
-func PrintASCII(char byte) string {
-		  nonprint, ok := whitespaceMap[char]
-		  if ok {
-					 return nonprint
-		  } else if char > 127 {
-					 return "<UTF-8>"
-		  } else {
-					 return string(char)
-		  }
-}
+/*---Pure Text Options---*/
 
-func PrintASCIIStr(char []byte) string {
-		  length := len(char)
-		  str := ""
 
-		  for i := 0; i < length; i++ {
-					 nonprint, ok := whitespaceMap[char[i]]
-					 if ok {
-								str = str + nonprint
-					 } else if char[i] > 127 {
-								str = str + "<UTF-8>"
-					 } else {
-								str = str + string(char)
-					 }
-		  }
-
-		  return str
-}
-
+// This should be once out of file
 func frequencyMapAppend(collect map[string]int, newKey string) {
 
 			 _, ok := collect[newKey]
@@ -60,7 +25,7 @@ func frequencyMapAppend(collect map[string]int, newKey string) {
 }
 
 
-func CountChars(text []byte) map[string]int {
+func CountChars(text string) map[string]int {
 		  collect := make(map[string]int)
 		  length := len(text)
 
@@ -71,12 +36,13 @@ func CountChars(text []byte) map[string]int {
 		  return collect
 }
 
-func CountBis(text []byte) map[string]int {
+func CountNgrams(text string, letters int) map[string]int {
 		  collect := make(map[string]int)
-		  length := len(text) - 1 // Currently ignoring the final character
+		  n := letters - 1
+		  length := len(text) - n // Currently ignoring the final character
 
 		  for i := 0; i < length; i++ {
-					 bigram := string(text[i]) + string(text[i + 1])
+					 bigram := string(text[i:i + n])
 					 frequencyMapAppend(collect, bigram)
 		  }
 		  return collect
@@ -112,4 +78,36 @@ func CountWords(text []byte) map[string]int {
 		  return collect
 }
 
+/*--- Print formating ---*/
 
+func mirrorSort(unsortedPair Slicepair) Slicepair {
+
+		  nums := unsortedPair.Occurences
+		  elems := unsortedPair.Blocks
+
+		  length := len(nums)
+		  sortedElems := make([]string, length)
+		  sortedNums := make([]int, length)
+
+		  var index int
+		  var biggest int
+		  for i := 0; i < length; i++ {
+					 index = i
+					 biggest = nums[index]
+					 for j := 0; j < length; j++ {
+								if nums[j] > biggest {
+										  index = j
+										  biggest = nums[j]
+								}
+					 }
+
+					 sortedNums[i] = nums[index]
+					 sortedElems[i] = elems[index]
+
+					 nums[index] = -1
+		  }
+		  
+		  pair := Slicepair{Blocks: sortedElems, Occurences: sortedNums}
+
+		  return pair
+}
