@@ -10,7 +10,7 @@ package texploreVoodoo
 
 import (
 		  "strings"
-		  "texplore/ascii"
+		  tfmt "texplore/dataformat"
 		 // "reflect"
 )
 
@@ -58,7 +58,7 @@ var (
 					 "Left-Middle": {"r", "R", "y", "Y", "v", "V", "c", "C"},
 					 "Left-Ring": {"s", "S", "f", "F", "k", "K", "j", "J"},
 					 "Left-Pinky": {"a", "A", "u", "U", "q", "Q", "z", "Z"},
-
+		  }
 )
 
 // procedurally genreated keymaps
@@ -133,7 +133,7 @@ func fingerUse(block string, fingerMap []string) int {
 // Takes a slice pair and retruns a map of how frequently one finger is used is a given block
 // if it's a bigram it same finger rpetition
 // chracter slice is finger use frentchecy
-func BigramEval(pair texploreASCII.Slicepair, keymap map[string][]string) map[string]int {
+func BigramEval(pair tfmt.Slicepair, keymap map[string][]string) map[string]int {
 		  blocks := pair.Blocks
 		  freq := pair.Occurences
 

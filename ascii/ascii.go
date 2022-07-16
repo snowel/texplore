@@ -1,10 +1,5 @@
 package texploreASCII
 
-import(
-		  "fmt"
-
-		  dataformat "texplore/dataformat"
-)
 
 /*--- ASCII Enconded Text ---*/
 

@@ -1,7 +1,7 @@
 package asstring
 
 import (
-		  "fmt"
+		  "strings"
 )
 
 type Slicepair struct {
@@ -10,6 +10,34 @@ type Slicepair struct {
 }
 
 /*---Pure Text Options---*/
+
+// Return a strin with all occurences of the substring being removed
+func purgeSubStrings(target string, ex []string) string {
+		  exLen := len(ex)
+		  stringHolder := []string{target}
+
+		  for i := 0; i < exLen; i++ {
+					 if strings.Contains(stringHolder[0], ex[i]){
+								rep := strings.NewReplacer(ex[i], "")// I think this whole funciton can be just one replacer...TODO
+								stringHolder[0] = rep.Replace(stringHolder[0])
+					 }
+		  }
+
+		  return stringHolder[0]
+}
+
+// is this rune in my slice of searched runes?
+func runeMatch(input rune, set []rune) bool {
+		  length := len(set)
+
+		  for i := 0; i < length; i++ {
+					 if input == set[i] {
+								return true
+					 }
+		  }
+
+		  return false
+}
 
 
 // This should be once out of file
@@ -61,18 +89,24 @@ func CountSentences(text []byte) map[string]int {
 }
 
 
-func CountWords(text []byte) map[string]int {
+func CountWords(text string) map[string]int {
 		  collect := make(map[string]int)
-		  length := len(text) - 1 // Currently ignoring the final character
-		  var word []byte // each word will get strore in here
+		  // if I can't change the string []string will work
+		  runestring := []rune(text)
+		  length := len(runestring)
+		  var wordStartMark int
+		  var readingWord bool
+		  punctuation := []string{"!", ",", ".", ";", ":", "(", ")", " "}// currently hard coded TODO
+		  wordDelimit := []rune(" ")
+
 		  for i := 0; i < length; i++ {
-					 if text[i] != 32 {
-								word = append(word, text[i])
-					 } else if word == nil {
-								continue
-					 }else {
-								frequencyMapAppend(collect, PrintASCIIStr(word))
-								word = nil
+					 if !runeMatch(runestring[i], wordDelimit) && wordStartMark != i && !readingWord {
+								wordStartMark = i
+								readingWord = true
+					 } else if runeMatch(runestring[i], wordDelimit) && wordStartMark != i && readingWord {
+								word := string(runestring[wordStartMark:i])
+								frequencyMapAppend(collect, purgeSubStrings(word, punctuation))
+								readingWord = false
 					 }
 		  }
 		  return collect
@@ -80,7 +114,7 @@ func CountWords(text []byte) map[string]int {
 
 /*--- Print formating ---*/
 
-func mirrorSort(unsortedPair Slicepair) Slicepair {
+func MirrorSort(unsortedPair Slicepair) Slicepair {
 
 		  nums := unsortedPair.Occurences
 		  elems := unsortedPair.Blocks

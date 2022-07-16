@@ -1,6 +1,8 @@
 package dataformat
 
-
+import (
+		  "fmt"
+)
 
 type Slicepair struct {
 		  Blocks []string
@@ -57,7 +59,7 @@ func SortMap(collect map[string]int) Slicepair {
 
 		  // mirror sort the slices
 		  sortedPair := Slicepair{Blocks: textKey, Occurences: occurs}
-		  sortedPair = mirrorSort(sortedPair)
+		  sortedPair = MirrorSort(sortedPair)
 
 		  return sortedPair
 }
