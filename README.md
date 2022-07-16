@@ -10,8 +10,20 @@ Texplore was originally created as a tool to help optimize the defualt layout of
 
 The number of occurences of a given character in a body of text.
 
-#### Bigrams
+#### Ngrams
 
-This ranks the requency of bigrams, which is to say, how often two chracters show up side by side in a peice of text.
+This ranks the requency of bigrams, trigrams, etc, which is to say, how often n chracters show up side by side in a piece of text.
 
-Th purpose of checking bigrams is to determin how offten a keymap will requiere the typist to use the same finger 2 characters in a row. To check this, a psuedo-keyma is made, which assicates every character with a finger. Currently psuedo-keymaps are hardcodded.
+Ngrams allow to determin how offten a keymap will requiere the typist to use the same finger n characters in a row.
+
+
+#### Word Frequency
+
+Counts the occurence of each word in the text. Case sensitive.
+The following characters are purged from the text.
+*;
+*:
+*!
+*,
+*(
+*)
