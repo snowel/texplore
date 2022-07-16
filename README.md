@@ -21,9 +21,10 @@ Ngrams allow to determin how offten a keymap will requiere the typist to use the
 
 Counts the occurence of each word in the text. Case sensitive.
 The following characters are purged from the text.
-*;
-*:
-*!
-*,
-*(
-*)
+
+* ;
+* :
+* !
+* ,
+* (
+* )
