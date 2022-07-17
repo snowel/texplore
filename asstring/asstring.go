@@ -2,12 +2,8 @@ package asstring
 
 import (
 		  "strings"
+		  tfmt "texplore/dataformat"
 )
-
-type Slicepair struct {
-		  Blocks []string
-		  Occurences []int
-}
 
 /*---Pure Text Options---*/
 
@@ -66,8 +62,8 @@ func CountChars(text string) map[string]int {
 
 func CountNgrams(text string, letters int) map[string]int {
 		  collect := make(map[string]int)
-		  n := letters - 1
-		  length := len(text) - n // Currently ignoring the final character
+		  n := letters
+		  length := len(text) - (n - 1) // Currently ignoring the final character
 
 		  for i := 0; i < length; i++ {
 					 bigram := string(text[i:i + n])
@@ -114,7 +110,7 @@ func CountWords(text string) map[string]int {
 
 /*--- Print formating ---*/
 
-func MirrorSort(unsortedPair Slicepair) Slicepair {
+func MirrorSort(unsortedPair tfmt.Slicepair) tfmt.Slicepair {
 
 		  nums := unsortedPair.Occurences
 		  elems := unsortedPair.Blocks
@@ -141,7 +137,7 @@ func MirrorSort(unsortedPair Slicepair) Slicepair {
 					 nums[index] = -1
 		  }
 		  
-		  pair := Slicepair{Blocks: sortedElems, Occurences: sortedNums}
+		  pair := tfmt.Slicepair{Blocks: sortedElems, Occurences: sortedNums}
 
 		  return pair
 }
