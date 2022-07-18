@@ -73,13 +73,24 @@ func CountNgrams(text string, letters int) map[string]int {
 }
 
 // Counts sentences, asentece asre defined by "!", "?" and "." also "... {Uppoer-case}"(technically not alway true as it could be a name)
-func CountSentences(text []byte) map[string]int {
+// TODO doesn't quite work with quotes, also newlines ar problemeatic, and "..." will need to be addressed
+func CountSentences(text string) map[string]int {
 		  collect := make(map[string]int)
-		  length := len(text) - 1 // Currently ignoring the final character
+		  runestring := []rune(text)
+		  length := len(runestring)
+		  var (
+					 sentence []rune
+		  )
+		  endChars := []rune("!?.")
 
 		  for i := 0; i < length; i++ {
-					 bigram := string(text[i]) + string(text[i + 1])
-					 frequencyMapAppend(collect, bigram)
+					 if runeMatch(runestring[i], endChars){
+								sentence = append(sentence, runestring[i])
+								frequencyMapAppend(collect, string(sentence))
+								sentence = nil
+					 } else {
+								sentence = append(sentence, runestring[i])
+					 }
 		  }
 		  return collect
 }

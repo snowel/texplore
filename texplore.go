@@ -65,6 +65,11 @@ func main() {
 					 tfmt.PrintSlicepair(words)
 		  }
 		  case 3: {
+					 sentOcc := tstring.CountSentences(text)
+					 sentences := tfmt.SortMap(sentOcc)
+					 tfmt.PrintSlicepair(sentences)
+		  }
+		  case 4: {
 					 if *Ngram == 0 {
 								fmt.Println("Please specify the number of character you want to group together by using the ngram flag: -ngram=2")
 								break
