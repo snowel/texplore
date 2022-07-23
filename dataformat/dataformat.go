@@ -6,7 +6,18 @@ import (
 
 type Slicepair struct {
 		  Blocks []string
-		  Occurences []int
+		  Occurences []int//This could be uint as it will never be negative
+}
+
+func SlicepairOccSum(pair *Slicepair) int {
+		  length := len(pair.Occurences)
+		  counter := 0
+
+		  for i := 0; i < length; i++ {
+					 counter += pair.Occurences[i]
+		  }
+
+		  return counter
 }
 
 

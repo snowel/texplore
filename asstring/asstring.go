@@ -7,6 +7,7 @@ import (
 
 /*---Pure Text Options---*/
 
+//TODO I think there are better approaches to cleaning the text than this func being called each time
 // Return a strin with all occurences of the substring being removed
 func purgeSubStrings(target string, ex []string) string {
 		  exLen := len(ex)
@@ -23,6 +24,7 @@ func purgeSubStrings(target string, ex []string) string {
 }
 
 // is this rune in my slice of searched runes?
+// Find the answer with this handy dandy function!
 func runeMatch(input rune, set []rune) bool {
 		  length := len(set)
 
@@ -47,7 +49,6 @@ func frequencyMapAppend(collect map[string]int, newKey string) {
 			 }
 
 }
-
 
 func CountChars(text string) map[string]int {
 		  collect := make(map[string]int)

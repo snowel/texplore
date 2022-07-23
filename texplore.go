@@ -47,6 +47,8 @@ func main() {
 		  case 0: {// this mode will probably be depreciated, as it can be the defualt of ngam=1
 					 charOcc := tstring.CountChars(text)
 					 chars := tfmt.SortMap(charOcc)
+					 totalChars := tfmt.SlicepairOccSum(&chars)
+					 fmt.Println("This text has a total of -> ", totalChars, " <- characters.")
 					 tfmt.PrintSlicepair(chars)
 					 
 		  }
@@ -62,11 +64,15 @@ func main() {
 		  case 2: {
 					 wordOcc := tstring.CountWords(text)
 					 words := tfmt.SortMap(wordOcc)
+					 totalWords := tfmt.SlicepairOccSum(&words)
+					 fmt.Println("This text has a total of -> ", totalWords, " <- words.")
 					 tfmt.PrintSlicepair(words)
 		  }
 		  case 3: {
 					 sentOcc := tstring.CountSentences(text)
 					 sentences := tfmt.SortMap(sentOcc)
+					 totalSentences := tfmt.SlicepairOccSum(&sentences)
+					 fmt.Println("This text has a total of -> ", totalSentences, " <- sentences.")
 					 tfmt.PrintSlicepair(sentences)
 		  }
 		  case 4: {
