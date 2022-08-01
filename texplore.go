@@ -5,6 +5,7 @@ import (
 		  "log"  
 		  "fmt"
 		  "flag"
+		  "strings"
 
 		  voodoo "texplore/voodoo"
 		  tfmt "texplore/dataformat"
@@ -25,6 +26,7 @@ func openFile(filename string) string{
 func main() {
 		  filename := flag.String("f", "", "Name of the file to explore.")
 		  mode := flag.Int("m", 0, "Infomation you want out of the text. 0: Character freq\n 1: Ngrams\n 2: Word freq\n")
+		  lowerCase := flag.Int("case", 0, "Set all characters to lower case (as to not differentiate) 0: no\n 1: yes\n")
 		  Ngram := flag.Int("ngram", 0, "Number of characters per group")
 //TODO - Better UI
 // is there a way to hybridize the flags + args notation???
@@ -45,6 +47,9 @@ func main() {
 		  text := openFile(*filename)
 		  switch *mode {
 		  case 0: {// this mode will probably be depreciated, as it can be the defualt of ngam=1
+					 if *lowerCase == 1 {
+								text = strings.ToLower(text)
+					 }
 					 charOcc := tstring.CountChars(text)
 					 chars := tfmt.SortMap(charOcc)
 					 totalChars := tfmt.SlicepairOccSum(&chars)
@@ -57,11 +62,17 @@ func main() {
 								fmt.Println("Please specify the number of character you want to group together by using the ngram flag: -ngram=2")
 								break
 					 }
+					 if *lowerCase == 1 {
+								text = strings.ToLower(text)
+					 }
 					 ngramOcc := tstring.CountNgrams(text, *Ngram)
 					 grams := tfmt.SortMap(ngramOcc)
 					 tfmt.PrintSlicepair(grams)
 		  }
 		  case 2: {
+					 if *lowerCase == 1 {
+								text = strings.ToLower(text)
+					 }
 					 wordOcc := tstring.CountWords(text)
 					 words := tfmt.SortMap(wordOcc)
 					 totalWords := tfmt.SlicepairOccSum(&words)
@@ -69,6 +80,9 @@ func main() {
 					 tfmt.PrintSlicepair(words)
 		  }
 		  case 3: {
+					 if *lowerCase == 1 {
+								text = strings.ToLower(text)
+					 }
 					 sentOcc := tstring.CountSentences(text)
 					 sentences := tfmt.SortMap(sentOcc)
 					 totalSentences := tfmt.SlicepairOccSum(&sentences)
@@ -79,6 +93,9 @@ func main() {
 					 if *Ngram == 0 {
 								fmt.Println("Please specify the number of character you want to group together by using the ngram flag: -ngram=2")
 								break
+					 }
+					 if *lowerCase == 1 {
+								text = strings.ToLower(text)
 					 }
 					 ngramOcc := tstring.CountNgrams(text, *Ngram)
 					 grams := tfmt.SortMap(ngramOcc)
