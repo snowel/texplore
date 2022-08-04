@@ -38,7 +38,7 @@ func main() {
 //} else {}
 //filename := os.Args[1]
 
-		  flag.Parse()// TODO error check?
+		  flag.Parse()
 
 		  if *filename == "" {
 					 fmt.Println("A file must be specified with the file name flag: -f=alice.txt")
@@ -46,7 +46,7 @@ func main() {
 		  }
 		  text := openFile(*filename)
 		  switch *mode {
-		  case 0: {// this mode will probably be depreciated, as it can be the defualt of ngam=1
+		  case 0: {// This mode will probably be depreciated, as it can be the defualt of ngam=1.
 					 if *lowerCase == 1 {
 								text = strings.ToLower(text)
 					 }

@@ -7,15 +7,15 @@ import (
 
 /*---Pure Text Options---*/
 
-//TODO I think there are better approaches to cleaning the text than this func being called each time
-// Return a strin with all occurences of the substring being removed
+//TODO There are better approaches to cleaning the text than this func being called each time.
+// Return a string with all occurences of the substring being removed.
 func purgeSubStrings(target string, ex []string) string {
 		  exLen := len(ex)
 		  stringHolder := []string{target}
 
 		  for i := 0; i < exLen; i++ {
 					 if strings.Contains(stringHolder[0], ex[i]){
-								rep := strings.NewReplacer(ex[i], "")// I think this whole funciton can be just one replacer...TODO
+								rep := strings.NewReplacer(ex[i], "")
 								stringHolder[0] = rep.Replace(stringHolder[0])
 					 }
 		  }
@@ -23,8 +23,7 @@ func purgeSubStrings(target string, ex []string) string {
 		  return stringHolder[0]
 }
 
-// is this rune in my slice of searched runes?
-// Find the answer with this handy dandy function!
+// Figure out if a rune is in a slice of searched.
 func runeMatch(input rune, set []rune) bool {
 		  length := len(set)
 
@@ -37,8 +36,8 @@ func runeMatch(input rune, set []rune) bool {
 		  return false
 }
 
-
-// This should be once out of file
+// TODO factor out.
+// Add an occurence counter of a block to a map.
 func frequencyMapAppend(collect map[string]int, newKey string) {
 
 			 _, ok := collect[newKey]
@@ -73,8 +72,8 @@ func CountNgrams(text string, letters int) map[string]int {
 		  return collect
 }
 
-// Counts sentences, asentece asre defined by "!", "?" and "." also "... {Uppoer-case}"(technically not alway true as it could be a name)
-// TODO doesn't quite work with quotes, also newlines ar problemeatic, and "..." will need to be addressed
+// Counts sentences, a sentence is defined by "!", "?", "." also "... {Uppoer-case}" and "!?"
+// TODO Doesn't quite work with quotes, also newlines are problemeatic and "..." will need to be addressed. I.E. Currently broken
 func CountSentences(text string) map[string]int {
 		  collect := make(map[string]int)
 		  runestring := []rune(text)
@@ -99,12 +98,11 @@ func CountSentences(text string) map[string]int {
 
 func CountWords(text string) map[string]int {
 		  collect := make(map[string]int)
-		  // if I can't change the string []string will work
 		  runestring := []rune(text)
 		  length := len(runestring)
 		  var wordStartMark int
 		  var readingWord bool
-		  punctuation := []string{"!", ",", ".", ";", ":", "(", ")", " "}// currently hard coded TODO
+		  punctuation := []string{"!", ",", ".", ";", ":", "(", ")", " "}// hard coded TODO
 		  wordDelimit := []rune(" ")
 
 		  for i := 0; i < length; i++ {
@@ -118,38 +116,4 @@ func CountWords(text string) map[string]int {
 					 }
 		  }
 		  return collect
-}
-
-/*--- Print formating ---*/
-
-func MirrorSort(unsortedPair tfmt.Slicepair) tfmt.Slicepair {
-
-		  nums := unsortedPair.Occurences
-		  elems := unsortedPair.Blocks
-
-		  length := len(nums)
-		  sortedElems := make([]string, length)
-		  sortedNums := make([]int, length)
-
-		  var index int
-		  var biggest int
-		  for i := 0; i < length; i++ {
-					 index = i
-					 biggest = nums[index]
-					 for j := 0; j < length; j++ {
-								if nums[j] > biggest {
-										  index = j
-										  biggest = nums[j]
-								}
-					 }
-
-					 sortedNums[i] = nums[index]
-					 sortedElems[i] = elems[index]
-
-					 nums[index] = -1
-		  }
-		  
-		  pair := tfmt.Slicepair{Blocks: sortedElems, Occurences: sortedNums}
-
-		  return pair
 }

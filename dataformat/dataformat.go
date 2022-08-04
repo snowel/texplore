@@ -6,7 +6,7 @@ import (
 
 type Slicepair struct {
 		  Blocks []string
-		  Occurences []int//This could be uint as it will never be negative
+		  Occurences []int
 }
 
 func SlicepairOccSum(pair *Slicepair) int {
@@ -23,6 +23,7 @@ func SlicepairOccSum(pair *Slicepair) int {
 
 /*--- Print formating ---*/
 
+// Sorts a slicepair.
 func MirrorSort(unsortedPair Slicepair) Slicepair {
 
 		  nums := unsortedPair.Occurences
@@ -55,8 +56,9 @@ func MirrorSort(unsortedPair Slicepair) Slicepair {
 		  return pair
 }
 
+// Converts a map into a slicepair and sorts it.
 func SortMap(collect map[string]int) Slicepair {
-		  // split the map into matching slices
+		  // Split the map into matching slices.
 		  length := len(collect)
 		  textKey := make([]string, length)
 		  occurs := make([]int, length)
@@ -68,7 +70,7 @@ func SortMap(collect map[string]int) Slicepair {
 
 		  }
 
-		  // mirror sort the slices
+		  // Mirror sort the slices.
 		  sortedPair := Slicepair{Blocks: textKey, Occurences: occurs}
 		  sortedPair = MirrorSort(sortedPair)
 

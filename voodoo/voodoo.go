@@ -1,17 +1,16 @@
 package texploreVoodoo
 
-/*--- This is a package for testing voodoo layouts.
-		  repeating single finger use 
-		  repeating same hand use
-		  etc ---*/
+/*--- 
+		  This is a package for testing voodoo layouts.
+		  -repeating single finger use 
+		  -repeating same hand use
+		  -etc
+---*/
 
-
-/* Note that eventually, hand/finger count agnostic and keybaord agnostic packages are planned*/
 
 import (
 		  "strings"
 		  tfmt "texplore/dataformat"
-		 // "reflect"
 )
 
 var (
@@ -61,60 +60,6 @@ var (
 		  }
 )
 
-// procedurally genreated keymaps
-/*
-var L1charPool = []string{"u", "f", "c", "d", "h", " ", "l", "w" }
-
-// generates all the maps of a voodoo map, one row is fixed, the other is permuted
-func fixedRowPermRow(fixedMap map[string][]string, permMap map[string][]string) *[]map[string][]string {
-		  var permutations [][]string
-		  var allMyMaps []map[string][]string
-
-		  Heaps(8, permMap, &permutations) // poppulated the permutaitons
-//TODO aliase row_length = 8
-		  nPerms := len(permutations) // determine how many varaints we have
-
-		  for i := 0; i < nPerms; i++ {
-
-					 thisMap := fixedMap
-
-					 thisMap["Right-Index"] = append(thisMap["Right-Index"], permutations[i])
-					 thisMap["Right-Middle"] = append(thisMap["Right-Middle"], permutations[i])
-					 thisMap["Right-Ring"] = append(thisMap["Right-Ring"], permutations[i])
-					 thisMap["Right-Pinky"] = append(thisMap["Right-Pinky"], permutations[i])
-					 thisMap["Left-Index"] = append(thisMap["Left-Index"], permutations[i])
-					 thisMap["Left-Middle"] = append(thisMap["Left-Middle"], permutations[i])
-					 thisMap["Left-Ring"] = append(thisMap["Left-Ring"], permutations[i])
-					 thisMap["Left-Pinky"] = append(thisMap["Left-Pinky"], permutations[i])
-
-					 *allMyMaps = append(*allMyMaps, thisMap)
-		  }
-
-		  return &allMyMaps
-
-}
-
-func Heaps(k int, arr []string, permutations *[][]string) {
-		  if k == 1 {
-					 fmt.Println(arr)
-					 *permutations = append(*permutations, arr)
-		  } else {
-					 swap := reflect.Swapper(arr)
-					 Heaps(k - 1, arr, permutations)
-					 
-					 for i := 0; i < k - 1; i++ {
-								if k % 2 == 0 {
-										  swap(i, k - 1)
-								} else {
-										  swap(0, k - 1)
-								}
-
-								Heaps(k - 1, arr, permutations)
-					 }
-		  }
-}
-*/
-
 // Check if any of the strings(keys) the finger is reponsible for appear in the block
 func fingerUse(block string, fingerMap []string) int {
 		  keys := len(fingerMap)
@@ -130,7 +75,7 @@ func fingerUse(block string, fingerMap []string) int {
 }
 
 
-// Takes a slice pair and retruns a map of how frequently one finger is used is a given block
+// Takes a slice pair and retruns a map of how frequently one finger is used is a given block where the blocks are bigrams
 // if it's a bigram it same finger rpetition
 // chracter slice is finger use frentchecy
 func BigramEval(pair tfmt.Slicepair, keymap map[string][]string) map[string]int {
