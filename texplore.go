@@ -6,6 +6,7 @@ import (
 		  "fmt"
 		  "flag"
 		  "strings"
+		  "encoding/json"
 
 		  voodoo "texplore/voodoo"
 		  tfmt "texplore/dataformat"
@@ -24,6 +25,23 @@ func openFile(filename string) string{
 }
 
 func main() {
+
+		  if len(os.Args[1:]) < 1 {
+					 
+					 text := openFile("alice.txt")
+					 text = strings.ToLower(text)
+					 ngramOcc := tstring.CountNgrams(text, 2)
+					 grams := tfmt.SortMap(ngramOcc)
+					 slicemaps := voodoo.HeapSliceMap(voodoo.SingleLayer1)
+					 Evals := voodoo.EvalMaps(slicemaps, voodoo.SingleLayerMap, grams)
+
+					 jfile, _ := json.Marshal(Evals)
+					 os.WriteFile("EvaluationsMapJason", jfile, 0666)
+					 fmt.Println(Evals)
+
+					 return
+		  }
+
 		  filename := flag.String("f", "", "Name of the file to explore.")
 		  mode := flag.Int("m", 0, "Infomation you want out of the text. 0: Character freq\n 1: Ngrams\n 2: Word freq\n")
 		  lowerCase := flag.Int("case", 0, "Set all characters to lower case (as to not differentiate) 0: no\n 1: yes\n")

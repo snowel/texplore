@@ -21,6 +21,19 @@ func SlicepairOccSum(pair *Slicepair) int {
 }
 
 
+func KeymapAppend(finger string, newkey string, keymap map[string][]string) {
+		 
+          var empty []string
+			 _, ok := keymap[finger]
+			 if ok == true {
+						keymap[finger] = append(keymap[finger], newkey)
+			 } else {
+						keymap[finger] = empty
+						keymap[finger] = append(keymap[finger], newkey)
+			 }
+}
+
+
 /*--- Print formating ---*/
 
 // Sorts a slicepair.
