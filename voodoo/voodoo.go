@@ -9,6 +9,7 @@ package texploreVoodoo
 
 
 import (
+		  "C"
 		  "fmt"
 		  "strings"
 		  "reflect"
@@ -20,6 +21,18 @@ var (
 		  EmptyMap = make(map[string][]string)
 		  SingleLayer2 = []string{"h", "n", "e", "m", "i", "l", "o", "w", "t", "d", "r", "c", "s", "f", "a", "u"}
 		  SingleLayer1 = []string{"h", "m", "l", "w", "d", "c", "f", "u"}
+
+
+		  ArrayMap1 = [8][]string{
+					 []string{"h", "n"},
+					 []string{"e", "m"},
+					 []string{"i", "l"},
+					 []string{"o", "w"},
+					 []string{"t", "d"},
+					 []string{"r", "c"},
+					 []string{"s", "f"},
+					 []string{"a", "u"},
+		  }
 
 		  SingleLayerMap = map[string][]string{
 					 "ri": {"h"},
@@ -127,17 +140,18 @@ func BigramEval(pair tfmt.Slicepair, keymap map[string][]string) map[string]int 
 
 // Takes a slicemap collection and evalueates each into a freq map
 
-func EvalMaps(slicemaps [][]string, basemap map[string][]string, ref tfmt.Slicepair) []map[string]int {
+func EvalMaps(slicemaps [][]string, basemap map[string][]string, ref tfmt.Slicepair) ([]map[string][]string, []map[string]int) {
 		  length := len(slicemaps)
 		  evaluations := make([]map[string]int, length)
-
+		  maps := make([]map[string][]string, length)
 		  for i := 0; i < length; i++ {
 					 keymap := SliceToKeymap(slicemaps[i], basemap)
 					 eval := BigramEval(ref, keymap)
 					 evaluations[i] = eval
+					 maps[i] = keymap
 					 fmt.Println(i, " of ", length)
 		  }
-		  return evaluations
+		  return maps, evaluations
 }
 
 //Heaps takes in a slice of chars and produces a slice of all possible orders
@@ -188,4 +202,129 @@ func SliceToKeymap(slicemap []string, keymap map[string][]string) map[string][]s
 		  }
 		  return keymap
 }
+
+// Optimization :: Slice keymaps - Is it worth it?
+// a keyman will be a slice of length n*8 where keys 0 through n-1 will have all chars the left pinky uses, n-1 through 2n-1 all keys for left ring, etc
+
+func arrFingerUse(block string, fingerMap []string) int {
+		  keys := len(fingerMap)
+		  counter := 0
+
+		  for i := 0; i < keys; i++ {
+					 if strings.Count(block, fingerMap[i]) > 0 {
+								counter++
+					 }
+		  }
+
+		  return counter
+}
+
+func indexToFinger(i int, mult int) int {
+		  position := i / 8
+		  overflow := i % 8
+		  return i - position * mult - overflow
+}
+func fingerToIndex(i int, mult int) (int,int) {
+		  return i*mult, i*mult + (mult-1)
+}
+
+
+func SMapBigramEval(pair tfmt.Slicepair, keymap []string, mult int) [8]int {
+		  mapLen := len(keymap)
+		  if mapLen % 8 != 0 {
+					 fmt.Println("SMapBigramEval :: Keymaps isn't multiple of 8. Use \"{[empty]}\" for none keys on ifinger if not all are used")
+		  }
+		  blocks := pair.Blocks
+		  freq := pair.Occurences
+
+		  var eval [8]int
+		  for i, v := range blocks {
+					 
+					 for j := 0; j < mapLen; j += mult {
+								finger := indexToFinger(j, mult)
+								start, finish := fingerToIndex(finger, mult) 
+								var fingerMap []string
+								if j == mapLen -1 {
+										  fingerMap = keymap[start:]
+								} else {
+										  fingerMap = keymap[start:finish]
+								}
+								if arrFingerUse(v, fingerMap) > 1 {
+										  eval[finger] += freq[i]
+								}
+					 } 
+		  }
+
+		  return eval
+}
+
+func MergeSMaps(sMap []string, sMap2 []string) []string {
+		  mult := len(sMap) / 8
+		  mult2 := len(sMap2) / 8
+		  var catmap []string
+
+		  for i := 0; i < 8; i++ {
+					 start, finish := fingerToIndex(i, mult) 
+					 catmap = append(catmap, sMap[start:finish + 1]...)
+					 start, finish = fingerToIndex(i, mult2) 
+					 catmap = append(catmap, sMap2[start:finish + 1]...)
+		  }
+		  
+		  return catmap
+}
+
+
+func PrintEval(keymap []string, mult int, eval [8]int) {
+
+		  for i:= 0; i < 8; i++ {
+					 start, finish := fingerToIndex(i, mult) 
+					 fmt.Println("Finger :: ", i, " is repeaded :: ", eval[i])
+					 fmt.Println(keymap[start:finish + 1])
+		  }
+}
+
+// Optimization :: Array keymaps - Is it worth it?
+//A keymap will be an array of string slices, positions mathcing the left to right position of the fingers on the keys
+
+func ArrBigramEval(pair tfmt.Slicepair, keymap [8][]string) [8]int {
+		  mapLen := len(keymap)
+		  if mapLen % 8 != 0 {
+					 fmt.Println("SMapBigramEval :: Keymaps isn't multiple of 8. Use \"{[empty]}\" for none keys on ifinger if not all are used")
+		  }
+		  blocks := pair.Blocks
+		  freq := pair.Occurences
+
+		  var eval [8]int
+		  for i, v := range blocks {
+					 
+					 for j := 0; j < 8; j++ {
+								if arrFingerUse(v, keymap[j]) > 1 {
+										  eval[j] += freq[i]
+								}
+					 } 
+		  }
+
+		  return eval
+}
+
+func MergeArrMaps(Map [8][]string, Map2 [8][]string) [8][]string {
+		  var catmap [8][]string
+
+		  for i := 0; i < 8; i++ {
+					 catmap[i] = append(catmap[i], Map[i]...)
+					 catmap[i] = append(catmap[i], Map2[i]...)
+		  }
+		  
+		  return catmap
+}
+
+
+func ArrPrintEval(keymap [8][]string, eval [8]int) {
+
+		  for i := 0; i < 8; i++ {
+					 fmt.Println("Finger :: ", i, " is repeaded :: ", eval[i])
+					 fmt.Println(keymap[i])
+		  }
+}
+
 

@@ -6,7 +6,7 @@ import (
 		  "fmt"
 		  "flag"
 		  "strings"
-		  "encoding/json"
+		  //"encoding/json"
 
 		  voodoo "texplore/voodoo"
 		  tfmt "texplore/dataformat"
@@ -32,13 +32,13 @@ func main() {
 					 text = strings.ToLower(text)
 					 ngramOcc := tstring.CountNgrams(text, 2)
 					 grams := tfmt.SortMap(ngramOcc)
-					 slicemaps := voodoo.HeapSliceMap(voodoo.SingleLayer1)
-					 Evals := voodoo.EvalMaps(slicemaps, voodoo.SingleLayerMap, grams)
 
-					 jfile, _ := json.Marshal(Evals)
-					 os.WriteFile("EvaluationsMapJason", jfile, 0666)
-					 fmt.Println(Evals)
+					 evals := voodoo.ArrBigramEval(grams, voodoo.ArrayMap1)
+					 voodoo.ArrPrintEval(voodoo.ArrayMap1, evals)
 
+					 //jfile, _ := json.Marshal(Evals)
+					 //os.WriteFile("EvaluationsMapJason", jfile, 0666)
+					 //fmt.Println(Evals)
 					 return
 		  }
 

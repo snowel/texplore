@@ -2,7 +2,7 @@ package asstring
 
 import (
 		  "strings"
-		  tfmt "texplore/dataformat"
+		 // tfmt "texplore/dataformat"
 )
 
 /*---Pure Text Options---*/
@@ -48,6 +48,7 @@ func frequencyMapAppend(collect map[string]int, newKey string) {
 			 }
 
 }
+
 
 func CountChars(text string) map[string]int {
 		  collect := make(map[string]int)
