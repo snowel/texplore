@@ -36,6 +36,30 @@ func runeMatch(input rune, set []rune) bool {
 		  return false
 }
 
+
+func SimplifyString(fullstring string) string {
+		  runeslice := []rune(strings.ToLower(fullstring))
+		  var simplerunes []rune
+		  for _, v := range runeslice {
+					 num := int(v)
+					 if num == 0x5F { // Underscore to hyphen
+								simplerunes = append(simplerunes, '-')
+					 } else if num == 0x3A {// Colon to semi
+								simplerunes = append(simplerunes, ';')
+					 } else if num == 0x3F {
+								simplerunes = append(simplerunes, '/')
+					 } else if num < 137 {
+								simplerunes = append(simplerunes, v)
+					 } else if num == 0x2019 || num == 0x2018{// single quote
+								simplerunes = append(simplerunes, '\'')
+					 } else if num == 0x201C || num == 0x201D{// double quote
+								simplerunes = append(simplerunes, '\'') // CURRENTLY SET TO UNIFY QUOTES
+					 }
+		  }
+
+		  return string(simplerunes)
+}
+
 // TODO factor out.
 // Add an occurence counter of a block to a map.
 func frequencyMapAppend(collect map[string]int, newKey string) {

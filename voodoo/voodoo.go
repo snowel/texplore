@@ -19,9 +19,56 @@ import (
 var (
 
 		  EmptyMap = make(map[string][]string)
+		  OffHomerow = []string{"b", "g", "h", "j", "k", "m", "l", "p", "q", "v", "x", "y", "z", "w", "d", "c", "f", "u"}
 		  SingleLayer2 = []string{"h", "n", "e", "m", "i", "l", "o", "w", "t", "d", "r", "c", "s", "f", "a", "u"}
 		  SingleLayer1 = []string{"h", "m", "l", "w", "d", "c", "f", "u"}
+		  
+		  NaiveHumanMap = [8][]string{
+					 []string{"y", "r", "c", "j"},
+					 []string{"s", "x", "f", "k"},
+					 []string{"o", "w", "{[enter]}", "{[backspace]}"},
+					 []string{"t", "d", "b", "g"},
+					 []string{"a", "u", "z", "q"},
+					 []string{"e", "m", ",", ";"},
+					 []string{"i", "u", "y", "-"},
+					 []string{"n", "h", "p", "v"},
+		  }
+		  
+		  MachineMix1 = [8][]string{
+					 []string{"h"},
+					 []string{"s"},
+					 []string{"o"},
+					 []string{"t"},
+					 []string{"a"},
+					 []string{"e"},
+					 []string{"i"},
+					 []string{"n"},
+		  }
 
+		  MachineMix2 = [8][]string{
+					 []string{"h", "r"},
+					 []string{"s", "c"},
+					 []string{"o", "d"},
+					 []string{"t", "m"},
+					 []string{"a", "g"},
+					 []string{"e", "w"},
+					 []string{"i", "u"},
+					 []string{"n", "l"},
+		  }
+
+		  MachineMix3 = [8][]string{
+					 []string{"h", "r", "v", ";"},
+					 []string{"s", "c", "f", "j"},
+					 []string{"o", "d", "k", "\""},
+					 []string{"t", "m", "b", "!"},
+					 []string{"a", "g", ",", "'"},
+					 []string{"e", "w", ".", "?"},
+					 []string{"i", "u", "y", "-"},
+					 []string{"n", "l", "p", "_"},
+		  }
+		  MachineRow2 = []string{"r", "l", "d", "u", "m", "c", "w", "g"} 
+		  MachineRow3 = []string{"f", "y", "p", ",", "b", ".", "k", "v"} 
+		  MachineRow4 = []string{"\"", "'", "_", "-", ";", "!", "j", "?"} 
 
 		  ArrayMap1 = [8][]string{
 					 []string{"h", "n"},
@@ -159,7 +206,7 @@ func EvalMaps(slicemaps [][]string, basemap map[string][]string, ref tfmt.Slicep
 					 eval := BigramEval(ref, keymap)
 					 evaluations[i] = eval
 					 maps[i] = keymap
-					 fmt.Println(i, " of ", length)
+					 //fmt.Println(i, " of ", length)
 		  }
 		  return maps, evaluations
 }
@@ -175,8 +222,10 @@ func HeapSMap(chars []string) [][]string {
 // Heaps algo, recursive
 func Heaps(k int, arr *[]string, permutations *[][]string) {
 		  if k == 1 {
-					 fmt.Println(*arr)
-					 *permutations = append(*permutations, *arr)
+					 //fmt.Println(*arr)
+					 arrcp := make([]string, len(*arr))
+					 copy(arrcp, *arr)
+					 *permutations = append(*permutations, arrcp)
 		  } else {
 					 swap := reflect.Swapper(*arr)
 					 Heaps(k - 1, arr, permutations)
@@ -366,9 +415,10 @@ func EvalArrMaps(smaps [][]string, basemap [8][]string, ref tfmt.Slicepair) Eval
 					 eval := ArrBigramEval(ref, keymap)
 					 evaluations[i] = eval
 					 maps[i] = keymap
-					 fmt.Println(i, " of ", length)
-					 fmt.Println(keymap)
-					 fmt.Println(eval)
+					 //fmt.Println(i, " of ", length)
+					 //fmt.Println(keymap)
+					 //fmt.Println(eval)
+					 //fmt.Println(ArrmapEvalSum(eval))
 		  }
 		  newEval := Evalcollect{maps: maps, evals: evaluations}
 		  return newEval
@@ -396,14 +446,23 @@ func ArrMin(array [8]int) int {
 		  return min
 }
 
+func ArrmapEvalSum (array [8]int) int {
+		  sum := 0
+		  for _, v := range array {
+					 sum += v
+		  }
+		  return sum
+}
+
+
 func SmallestRep(collect Evalcollect) ([8][]string, [8]int, int) {
 		  alleval := collect.evals
-		  minRep := ArrMin(collect.evals[0])
+		  minRep := ArrMax(collect.evals[0])
 		  minIndex := 0
 		  var singleMin int
 
 		  for i, v := range alleval {
-					 singleMin = ArrMin(v)
+					 singleMin = ArrMax(v)
 					 if singleMin < minRep {
 								minIndex = i
 								minRep = singleMin
@@ -431,9 +490,55 @@ func NSmallestRep(collect Evalcollect, n int) Evalcollect {
 					 //mutCol.maps = mutCol.maps[:finalElem]
 					 //mutCol.evals = mutCol.evals[:finalElem]
 					 
+					 fmt.Println()
+					 fmt.Println("This is the ", i, " lowest biggest reps.")
+					 fmt.Println(topmap)
+					 fmt.Println(topeval)
+					 fmt.Println(ArrmapEvalSum(topeval))
 		  }
 		  return topCol
 }
 
+func SmallestTotalReps(collect Evalcollect) ([8][]string, [8]int, int, int) {
+		  alleval := collect.evals
+		  minTotal := ArrmapEvalSum(alleval[0])
+		  minIndex := 0
+		  var singleMin int
 
+		  for i, v := range alleval {
+					 singleMin = ArrmapEvalSum(v)
+					 if singleMin < minTotal {
+								minIndex = i
+								minTotal = singleMin
+					 }
+		  }
 
+		  return collect.maps[minIndex], alleval[minIndex], minIndex, minTotal
+}
+
+func NSmallestTotalRep(collect Evalcollect, n int) Evalcollect {
+		  mutCol := collect
+		  var topCol Evalcollect
+
+		  for i := 0; i < n; i++ {
+					 topmap, topeval, index, total := SmallestTotalReps(mutCol)
+					 topCol.maps = append(topCol.maps, topmap)
+					 topCol.evals = append(topCol.evals, topeval)
+					 
+					 mutCol.maps = append(mutCol.maps[:index], mutCol.maps[index+1:]...)
+					 mutCol.evals = append(mutCol.evals[:index], mutCol.evals[index+1:]...)
+
+					 //finalElem := len(mutCol.maps) - 1
+					 //mutCol.maps[index] = mutCol.maps[finalElem]
+					 //mutCol.evals[index] = mutCol.evals[finalElem]
+					 //mutCol.maps = mutCol.maps[:finalElem]
+					 //mutCol.evals = mutCol.evals[:finalElem]
+					
+					 fmt.Println()
+					 fmt.Println("This is the ", i, " lowest total reps.")
+					 fmt.Println(topmap)
+					 fmt.Println(topeval)
+					 fmt.Println(total)
+		  }
+		  return topCol
+}
