@@ -266,6 +266,14 @@ func SliceToKeymap(slicemap []string, keymap map[string][]string) map[string][]s
 // Optimization :: Slice keymaps - Is it worth it?
 // a keyman will be a slice of length n*8 where keys 0 through n-1 will have all chars the left pinky uses, n-1 through 2n-1 all keys for left ring, etc
 
+func ArrFingerUse(block string, fingerMap []string) int {
+		  counter := 0
+		  for _, v := range fingerMap {
+					 counter += strings.Count(block, v)
+		  }
+		  return counter
+}
+
 func arrFingerUse(block string, fingerMap []string) int {
 		  keys := len(fingerMap)
 		  counter := 0
@@ -351,6 +359,17 @@ type Evalcollect struct {
 		  evals [][8]int
 }
 
+//Evaluate how much each finger is used total
+func ArrFingerEval(text string, keymap [8][]string) [8]int {
+		  var eval [8]int
+		  for j := 0; j < 8; j++ {
+					 eval[j] += ArrFingerUse(text, keymap[j])
+		  } 
+
+		  return eval
+}
+
+//Evaluate how much each finger is used twice in a row
 func ArrBigramEval(pair tfmt.Slicepair, keymap [8][]string) [8]int {
 		  mapLen := len(keymap)
 		  if mapLen % 8 != 0 {
