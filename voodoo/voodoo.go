@@ -33,6 +33,16 @@ var (
 					 []string{"s", "f"},
 					 []string{"a", "u"},
 		  }
+		  ArrayMap2 = [8][]string{
+					 []string{"a"},
+					 []string{"s"},
+					 []string{"r"},
+					 []string{"t"},
+					 []string{"n"},
+					 []string{"e"},
+					 []string{"i"},
+					 []string{"o"},
+		  }
 
 		  SingleLayerMap = map[string][]string{
 					 "ri": {"h"},
@@ -155,19 +165,20 @@ func EvalMaps(slicemaps [][]string, basemap map[string][]string, ref tfmt.Slicep
 }
 
 //Heaps takes in a slice of chars and produces a slice of all possible orders
-func HeapSliceMap(chars []string) [][]string {
+func HeapSMap(chars []string) [][]string {
 		  var collect [][]string
-		  Heaps (len(chars), chars, &collect)
+		  mut := chars
+		  Heaps(len(chars), &mut, &collect)
 		  return collect
 }
 
 // Heaps algo, recursive
-func Heaps(k int, arr []string, permutations *[][]string) {
+func Heaps(k int, arr *[]string, permutations *[][]string) {
 		  if k == 1 {
-					 fmt.Println(arr)
-					 *permutations = append(*permutations, arr)
+					 fmt.Println(*arr)
+					 *permutations = append(*permutations, *arr)
 		  } else {
-					 swap := reflect.Swapper(arr)
+					 swap := reflect.Swapper(*arr)
 					 Heaps(k - 1, arr, permutations)
 					 
 					 for i := 0; i < k - 1; i++ {
@@ -286,6 +297,11 @@ func PrintEval(keymap []string, mult int, eval [8]int) {
 // Optimization :: Array keymaps - Is it worth it?
 //A keymap will be an array of string slices, positions mathcing the left to right position of the fingers on the keys
 
+type Evalcollect struct {
+		  maps [][8][]string
+		  evals [][8]int
+}
+
 func ArrBigramEval(pair tfmt.Slicepair, keymap [8][]string) [8]int {
 		  mapLen := len(keymap)
 		  if mapLen % 8 != 0 {
@@ -318,6 +334,14 @@ func MergeArrMaps(Map [8][]string, Map2 [8][]string) [8][]string {
 		  return catmap
 }
 
+func SmapToArrmap(smap []string) [8][]string {
+		  var arrmap [8][]string
+		  for i, v := range smap {
+					 arrmap[i % 8] = append(arrmap[i % 8], v)
+		  }
+		  return arrmap
+}
+
 
 func ArrPrintEval(keymap [8][]string, eval [8]int) {
 
@@ -326,5 +350,90 @@ func ArrPrintEval(keymap [8][]string, eval [8]int) {
 					 fmt.Println(keymap[i])
 		  }
 }
+
+
+func EvalArrMaps(smaps [][]string, basemap [8][]string, ref tfmt.Slicepair) Evalcollect {
+		  length := len(smaps)
+		  evaluations := make([][8]int, length)
+		  maps := make([][8][]string, length)
+		  var (
+					 arrmap [8][]string
+					 keymap [8][]string
+		  )
+		  for i, v := range smaps {
+					 arrmap = SmapToArrmap(v)
+					 keymap = MergeArrMaps(arrmap, basemap)
+					 eval := ArrBigramEval(ref, keymap)
+					 evaluations[i] = eval
+					 maps[i] = keymap
+					 fmt.Println(i, " of ", length)
+					 fmt.Println(keymap)
+					 fmt.Println(eval)
+		  }
+		  newEval := Evalcollect{maps: maps, evals: evaluations}
+		  return newEval
+}
+
+func ArrMax(array [8]int) int {
+		  max := array[0]
+		  for _, v := range array {
+					 if v > max {
+								max = v
+					 }
+		  }
+
+		  return max
+}
+
+func ArrMin(array [8]int) int {
+		  min := array[0]
+		  for _, v := range array {
+					 if v < min {
+								min = v
+					 }
+		  }
+
+		  return min
+}
+
+func SmallestRep(collect Evalcollect) ([8][]string, [8]int, int) {
+		  alleval := collect.evals
+		  minRep := ArrMin(collect.evals[0])
+		  minIndex := 0
+		  var singleMin int
+
+		  for i, v := range alleval {
+					 singleMin = ArrMin(v)
+					 if singleMin < minRep {
+								minIndex = i
+								minRep = singleMin
+					 }
+		  }
+
+		  return collect.maps[minIndex], alleval[minIndex], minIndex
+}
+
+func NSmallestRep(collect Evalcollect, n int) Evalcollect {
+		  mutCol := collect
+		  var topCol Evalcollect
+
+		  for i := 0; i < n; i++ {
+					 topmap, topeval, index := SmallestRep(mutCol)
+					 topCol.maps = append(topCol.maps, topmap)
+					 topCol.evals = append(topCol.evals, topeval)
+					 
+					 mutCol.maps = append(mutCol.maps[:index], mutCol.maps[index+1:]...)
+					 mutCol.evals = append(mutCol.evals[:index], mutCol.evals[index+1:]...)
+
+					 //finalElem := len(mutCol.maps) - 1
+					 //mutCol.maps[index] = mutCol.maps[finalElem]
+					 //mutCol.evals[index] = mutCol.evals[finalElem]
+					 //mutCol.maps = mutCol.maps[:finalElem]
+					 //mutCol.evals = mutCol.evals[:finalElem]
+					 
+		  }
+		  return topCol
+}
+
 
 
