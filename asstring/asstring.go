@@ -23,7 +23,7 @@ func purgeSubStrings(target string, ex []string) string {
 		  return stringHolder[0]
 }
 
-// Figure out if a rune is in a slice of searched.
+// Figure out if a rune is in a slice of runes.
 func runeMatch(input rune, set []rune) bool {
 		  length := len(set)
 
@@ -36,15 +36,15 @@ func runeMatch(input rune, set []rune) bool {
 		  return false
 }
 
-
+// This version of simplify string is th DEVKIT--VOODOO versions, meant to be changed IN SOURCE as layouts are tested against eachothe
 func SimplifyString(fullstring string) string {
 		  runeslice := []rune(strings.ToLower(fullstring))
 		  var simplerunes []rune
 		  for _, v := range runeslice {
 					 num := int(v)
-					 if num == 0x5F { // Underscore to hyphen
+					 if num == 0x5F { // _ to -
 								simplerunes = append(simplerunes, '-')
-					 } else if num == 0x3A {// Colon to semi
+					 } else if num == 0x3A {// : to ;
 								simplerunes = append(simplerunes, ';')
 					 } else if num == 0x3F {
 								simplerunes = append(simplerunes, '/')
@@ -60,6 +60,29 @@ func SimplifyString(fullstring string) string {
 		  return string(simplerunes)
 }
 
+// Simplify each character of a string to the same key you would press on a default keyboard.
+func SimplifyStringKBInput(fullstring string) string {
+		  runeslice := []rune(strings.ToLower(fullstring))
+		  var simplerunes []rune
+		  for _, v := range runeslice {
+					 num := int(v)
+					 if num == 0x5F { // Underscore to hyphen
+								simplerunes = append(simplerunes, '-')
+					 } else if num == 0x3A { // Colon to semi
+								simplerunes = append(simplerunes, ';')
+					 } else if num == 0x3F { // ? to /
+								simplerunes = append(simplerunes, '/')
+					 } else if num < 137 {
+								simplerunes = append(simplerunes, v)
+					 } else if num == 0x2019 || num == 0x2018{// single quote
+								simplerunes = append(simplerunes, '\'')
+					 } else if num == 0x201C || num == 0x201D{// double quote
+								simplerunes = append(simplerunes, '\'') // CURRENTLY SET TO UNIFY QUOTES
+					 }
+		  }
+
+		  return string(simplerunes)
+}
 // TODO factor out.
 // Add an occurence counter of a block to a map.
 func frequencyMapAppend(collect map[string]int, newKey string) {

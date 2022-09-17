@@ -30,8 +30,8 @@ func main() {
 					 
 					 text := openFile("mix1/mixtext.txt")
 					 text = tstring.SimplifyString(text)
-					 ngramOcc := tstring.CountNgrams(text, 2)
-					 grams := tfmt.SortMap(ngramOcc)
+					 //ngramOcc := tstring.CountNgrams(text, 2)
+					 //grams := tfmt.SortMap(ngramOcc)
 
 					 //fmt.Println(voodoo.SingleLayer1)
 					 //fmt.Println(voodoo.ArrayMap2)
@@ -40,7 +40,7 @@ func main() {
 					 //fmt.Println(voodoo.MergeArrMaps(voodoo.ArrayMap2, morph))
 					 
 
-					 singleMap := voodoo.MachineMix3
+					 singleMap := voodoo.NaiveHumanFingerMap
 					 //voodoo.HeapSMap(singleMap)
 					 //smaps := voodoo.HeapSMap(singleMap)
 					 //fmt.Println(smaps)
@@ -49,9 +49,10 @@ func main() {
 					 //voodoo.NSmallestRep(col, 10)
 					 //  fmt.Println(top10)
 
-					 eval := voodoo.ArrBigramEval(grams, singleMap)
+					 fmt.Println(text)
+					 eval := voodoo.ArrFingerEval(text, singleMap)
 					 fmt.Println(eval)
-					 fmt.Println(voodoo.ArrmapEvalSum(eval))
+					 //fmt.Println(voodoo.ArrmapEvalSum(eval))
 					 //jfile, _ := json.Marshal(Evals)
 					 //os.WriteFile("EvaluationsMapJason", jfile, 0666)
 					 //fmt.Println(Evals)
@@ -63,15 +64,6 @@ func main() {
 		  lowerCase := flag.Int("case", 0, "Set all characters to lower case (as to not differentiate) 0: no\n 1: yes\n")
 		  simple := flag.Int("simp", 0, "Set all characters to lower case and only ascii compatible for input evals 0: no\n 1: yes\n")
 		  Ngram := flag.Int("ngram", 0, "Number of characters per group")
-//TODO - Better UI
-// is there a way to hybridize the flags + args notation???
-//argsLen := len(os.Args[1:])
-//if argsLen < 1 {
-//		 fmt.Println("Please specify a file.")
-// } else if argsLen > 1 {
-//			 fmt.Println("Please specify only one file.")
-//} else {}
-//filename := os.Args[1]
 
 		  flag.Parse()
 
@@ -81,7 +73,7 @@ func main() {
 		  }
 		  text := openFile(*filename)
 		  switch *mode {
-		  case 0: {// This mode will probably be depreciated, as it can be the defualt of ngam=1.
+		  case 0: {// This mode will probably be depreciated, as it can be the default of ngam=1.
 					 if *lowerCase == 1 {
 								text = strings.ToLower(text)
 					 }
