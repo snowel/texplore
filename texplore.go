@@ -6,7 +6,6 @@ import (
 		  "fmt"
 		  "flag"
 		  "strings"
-		  //"encoding/json"
 
 		  voodoo "texplore/voodoo"
 		  tfmt "texplore/dataformat"
@@ -28,34 +27,22 @@ func main() {
 
 		  if len(os.Args[1:]) < 1 {
 					 
-					 text := openFile("mix1/mixtext.txt")
+					 text := openFile("JL_Corpus.txt")
 					 text = tstring.SimplifyString(text)
 					 //ngramOcc := tstring.CountNgrams(text, 2)
 					 //grams := tfmt.SortMap(ngramOcc)
-
-					 //fmt.Println(voodoo.SingleLayer1)
-					 //fmt.Println(voodoo.ArrayMap2)
-					 //morph := voodoo.SmapToArrmap(voodoo.SingleLayer1) 
-					 //fmt.Println(morph)
-					 //fmt.Println(voodoo.MergeArrMaps(voodoo.ArrayMap2, morph))
 					 
 
-					 singleMap := voodoo.NaiveHumanFingerMap
-					 //voodoo.HeapSMap(singleMap)
+					 //singleMap := voodoo.Corp1Block4
 					 //smaps := voodoo.HeapSMap(singleMap)
-					 //fmt.Println(smaps)
-					 //col := voodoo.EvalArrMaps(smaps, voodoo.MachineMix3, grams)
+					 //col := voodoo.EvalArrMaps(smaps, voodoo.CorpusV1, grams)
 					 //voodoo.NSmallestTotalRep(col, 10)
 					 //voodoo.NSmallestRep(col, 10)
-					 //  fmt.Println(top10)
 
-					 fmt.Println(text)
-					 eval := voodoo.ArrFingerEval(text, singleMap)
+					 eval := voodoo.ArrFingerEval(text, voodoo.CorpusV1)
 					 fmt.Println(eval)
-					 //fmt.Println(voodoo.ArrmapEvalSum(eval))
-					 //jfile, _ := json.Marshal(Evals)
-					 //os.WriteFile("EvaluationsMapJason", jfile, 0666)
-					 //fmt.Println(Evals)
+					 fmt.Println(voodoo.ArrmapEvalSum(eval))
+					 fmt.Println(voodoo.CorpusV1)
 					 return
 		  }
 

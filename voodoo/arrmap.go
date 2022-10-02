@@ -2,6 +2,7 @@ package texploreVoodoo
 
 import (
 		  "fmt"
+		  "strings"
 		  tfmt "texplore/dataformat"
 )
 
@@ -39,6 +40,13 @@ func MergeArrMaps(Map [8][]string, Map2 [8][]string) [8][]string {
 }
 
 
+func ArrFingerUse(block string, fingerMap []string) int {
+		  counter := 0
+		  for _, v := range fingerMap {
+					 counter += strings.Count(block, v)
+		  }
+		  return counter
+}
 // Evaluate how much each finger is used in total.
 func ArrFingerEval(text string, keymap [8][]string) [8]int {
 		  var eval [8]int
@@ -84,6 +92,7 @@ func ArrBigramEval(pair tfmt.Slicepair, keymap [8][]string) [8]int {
 		  return eval
 }
 
+// Conver a slice of keystrokes to an array of slices, organizing into finger groups.
 func SmapToArrmap(smap []string) [8][]string {
 		  var arrmap [8][]string
 		  for i, v := range smap {
@@ -101,6 +110,7 @@ func ArrPrintEval(keymap [8][]string, eval [8]int) {
 		  }
 }
 
+// Takes a list of heap randomized slicemaps and gives the values of how often a finger is repeated
 func EvalArrMaps(smaps [][]string, basemap [8][]string, ref tfmt.Slicepair) Evalcollect {
 		  length := len(smaps)
 		  evaluations := make([][8]int, length)
@@ -158,7 +168,7 @@ func ArrmapEvalSum (array [8]int) int {
 		  return sum
 }
 
-
+// Finds the map with the smallest max repetition of any one finger
 func SmallestRep(collect Evalcollect) ([8][]string, [8]int, int) {
 		  alleval := collect.evals
 		  minRep := ArrMax(collect.evals[0])
@@ -176,6 +186,8 @@ func SmallestRep(collect Evalcollect) ([8][]string, [8]int, int) {
 		  return collect.maps[minIndex], alleval[minIndex], minIndex
 }
 
+
+//
 func NSmallestRep(collect Evalcollect, n int) Evalcollect {
 		  mutCol := collect
 		  var topCol Evalcollect
@@ -203,6 +215,7 @@ func NSmallestRep(collect Evalcollect, n int) Evalcollect {
 		  return topCol
 }
 
+// For a collectoin of evaluations,find the one with the minimum total repetition of all fingers 
 func SmallestTotalReps(collect Evalcollect) ([8][]string, [8]int, int, int) {
 		  alleval := collect.evals
 		  minTotal := ArrmapEvalSum(alleval[0])
@@ -247,3 +260,36 @@ func NSmallestTotalRep(collect Evalcollect, n int) Evalcollect {
 		  return topCol
 }
 /* -- Layer Swtich Optimization -- */
+
+// Semantics:
+// In the case of a layer optimizing for layer switching, the arrays of a [num][]string maps don't represent the fingers, but the layers.
+// i.e. for a  16 key voodoo, this would be a map of the form [2][]string but for an 8 key it would be [4][]string 
+
+// TODO CUrrently, the layercount of the map is hardcoded, as for finger speerated maps
+// For a given layer seperated map, count the number of times a switch happens (including the switch back to the base layer)
+func CountLayerSwitch(keymap [2][]string, refText string) int{
+		  counter := 0
+		  layers := len(keymap)
+		  currentLayer := 0;
+		  for _, v := range refText {
+					 if !sliceContains(keymap[currentLayer], v) {
+
+								// find the layer with the current character
+								loops := 0 // if the layer map is incomplete the loops will be infinite
+								for !sliceContains(keymap[currentLayer], v) {
+										  // Cycle to the next layer
+										  currentLayer++
+										  // Wrap around
+										  if currentLayer >= layers {currentLayer %= layers}
+
+										  if loops > layers {return -1}// the layer map is missing the character
+										  loops++
+										  // This could also be planned to skip that character, but this might be more responsible.
+								}
+
+								counter++
+					 }
+		  }
+		  return counter
+
+}

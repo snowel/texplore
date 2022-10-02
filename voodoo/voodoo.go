@@ -29,7 +29,26 @@ var (
 					 []string{"i", "u", "y", "-"},
 					 []string{"n", "h", "p", "v"},
 		  }
-		  
+		 
+// Based on a limited corpus
+
+		  CorpusV1 = [8][]string{
+					 []string{"h", "l", "m", "j"},
+					 []string{"s", "c", "f", "z"},
+					 []string{"o", "g", "y", "'"},
+					 []string{"t", "d", "p", "q"},
+					 []string{"a", "u", "k", "-"},
+					 []string{"e", "w", ".", "\t"},
+					 []string{"i", ",", "b", "\n"},
+					 []string{"n", "r", "v", "x"},
+		  }
+
+		  Corp1Block1 = []string{"e", "t", "a", "i", "n", "o", "s", "h"}
+		  Corp1Block2 = []string{"r", "l", "d", "u", "g", "c", "w", ","}
+		  Corp1Block3 = []string{"f", "m", "p", "y", "b", ".", "k", "v"} 
+		  Corp1Block4 = []string{"x", "\n", "q", "'", "j", "z", "-", "\t"} 
+
+
 		  TestLayerMap = [][]string{
 					 []string{"h", "m", "l", "w", "d", "c", "f", "u"},
 					 []string{"r", "l", "d", "u", "m", "c", "w", "g"}, 

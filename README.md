@@ -2,9 +2,9 @@
 
 Texplore is a simple CLI tool to explore the composition of a piece of text. The some of the text properties which can be pulled from the file with texplore including word frequency, character frequency, bigram frequency, etc
 
-# Big Note!
+## Big Note!
 
-Texplore was originally created as a tool to help optimize the defualt layout of the voodoo keyboard *(link comming soon)*.
+Texplore was originally created as a tool to help optimize the defualt layout of the [Voodoo keyboard](https://jloulou.com/voodoohome.html "Voodoo Keyboard Homepage").
 
 These featuers are actively being played with and have caused much of the resonable features to be organized alongsize a wild mess of code and test UI. If you wish to use texplore please ignore all keymap optimization features.
 
