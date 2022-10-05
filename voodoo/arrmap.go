@@ -267,16 +267,16 @@ func NSmallestTotalRep(collect Evalcollect, n int) Evalcollect {
 
 // TODO CUrrently, the layercount of the map is hardcoded, as for finger speerated maps
 // For a given layer seperated map, count the number of times a switch happens (including the switch back to the base layer)
-func CountLayerSwitch(keymap [2][]string, refText string) int{
+func CountLayerSwitch(keymap [][]string, refText string) int{
 		  counter := 0
 		  layers := len(keymap)
 		  currentLayer := 0;
 		  for _, v := range refText {
-					 if !sliceContains(keymap[currentLayer], v) {
+					 if !tfmt.SliceContains(keymap[currentLayer], string(v)) {
 
 								// find the layer with the current character
 								loops := 0 // if the layer map is incomplete the loops will be infinite
-								for !sliceContains(keymap[currentLayer], v) {
+								for !tfmt.SliceContains(keymap[currentLayer], string(v)) {
 										  // Cycle to the next layer
 										  currentLayer++
 										  // Wrap around

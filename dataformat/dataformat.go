@@ -34,6 +34,18 @@ func KeymapAppend(finger string, newkey string, keymap map[string][]string) {
 }
 
 
+//misc
+
+// I've written this somewhere...
+func SliceContains(slice []string, elem string) bool {
+		  for _, v := range slice {
+					 if v == elem {
+								return true
+					 }
+		  }
+		  return false
+}
+
 /*--- Print formating ---*/
 
 // Sorts a slicepair.

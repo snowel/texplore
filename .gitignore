@@ -1,2 +1,5 @@
 #test text
 *.txt
+
+# Keymap outputs
+tests/

@@ -26,9 +26,21 @@ func openFile(filename string) string{
 func main() {
 
 		  if len(os.Args[1:]) < 1 {
+					 // Layer permutaitons
+
+					 var acc [][][]string
+
+
+					 set := []string{"A", "B", "C", "D"}
+					 voodoo.AllLayerMaps(set, 2, acc)
+					 //voodoo.AllLayerMaps(voodoo.Corpus1Set, 16, acc)
+					 fmt.Println(acc)
 					 
-					 text := openFile("JL_Corpus.txt")
-					 text = tstring.SimplifyString(text)
+
+					 //text := openFile("JL_Corpus.txt")
+					 //text = tstring.SimplifyString(text)
+					 
+
 					 //ngramOcc := tstring.CountNgrams(text, 2)
 					 //grams := tfmt.SortMap(ngramOcc)
 					 
@@ -39,10 +51,10 @@ func main() {
 					 //voodoo.NSmallestTotalRep(col, 10)
 					 //voodoo.NSmallestRep(col, 10)
 
-					 eval := voodoo.ArrFingerEval(text, voodoo.CorpusV1)
-					 fmt.Println(eval)
-					 fmt.Println(voodoo.ArrmapEvalSum(eval))
-					 fmt.Println(voodoo.CorpusV1)
+					 //eval := voodoo.ArrFingerEval(text, voodoo.CorpusV1)
+					 //fmt.Println(eval)
+					 //fmt.Println(voodoo.ArrmapEvalSum(eval))
+					 //fmt.Println(voodoo.CorpusV1)
 					 return
 		  }
 
@@ -126,11 +138,7 @@ func main() {
 					 if *simple == 1 {
 								text = tstring.SimplifyString(text)
 					 }
-					 ngramOcc := tstring.CountNgrams(text, *Ngram)
-					 grams := tfmt.SortMap(ngramOcc)
-					 biReps := voodoo.BigramEval(grams, voodoo.Keymap2)
-					 fingerRep:= tfmt.SortMap(biReps)
-					 tfmt.PrintSlicepair(fingerRep)
+					 // Voodoo options here
 		  }
 		  }
 		  
