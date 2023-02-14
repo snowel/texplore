@@ -29,12 +29,10 @@ func main() {
 					 // Layer permutaitons
 
 					 var acc [][][]string
-
-
 					 set := []string{"A", "B", "C", "D"}
-					 voodoo.AllLayerMaps(set, 2, acc)
+					 voodoo.AllLayerMaps(set, 2, &acc)
 					 //voodoo.AllLayerMaps(voodoo.Corpus1Set, 16, acc)
-					 fmt.Println(acc)
+					 //fmt.Println(acc)
 					 
 
 					 //text := openFile("JL_Corpus.txt")
