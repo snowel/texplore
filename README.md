@@ -31,3 +31,11 @@ The following characters are purged from the text.
 **Currently quite broken**
 
 Counts the occurences of sentences. Generally not very useful for occurences, but allows to break the text up into sentences.
+
+### Obfuscate Corpus
+
+Obfuscating a corup involves keeping all the words and puntuation marks of a given corpus of text while randomizing the order of those.
+
+## TODO
+## yaml encoding repo
+create a repo of ecoding that gam be pulled in throguh the cli, and to which people cna contribute theyr own encodings.

@@ -37,7 +37,7 @@ func KeymapAppend(finger string, newkey string, keymap map[string][]string) {
 //misc
 
 // I've written this somewhere...
-func SliceContains(slice []string, elem string) bool {
+func SliceContains[E comparable](slice []E, elem E) bool {
 		  for _, v := range slice {
 					 if v == elem {
 								return true

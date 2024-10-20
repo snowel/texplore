@@ -3,6 +3,7 @@ import (
 		  "reflect"
 		  tfmt "texplore/dataformat"
 		  "fmt"
+
 )
 
 // --- Procedural permutaitons
@@ -23,7 +24,7 @@ func EvalMaps(slicemaps [][]string, basemap map[string][]string, ref tfmt.Slicep
 		  return maps, evaluations
 }
 
-//Heaps takes in a slice of chars and produces a slice of all possible orders
+// Heaps takes in a slice of chars and produces a slice of all possible orders.
 func HeapSMap(chars []string) [][]string {
 		  var collect [][]string
 		  mut := chars
@@ -93,6 +94,8 @@ and we want layers of size 2, we get:
 
 // All possible unordered combinaitons of length m (layerSize) for a given slice of strings
 //TODO acc could be [][m]string, a way to pre-copile confude these array funcitons, like with deinfes, would also apply to fingermaps for finger repeat
+
+// set leth % layer lenght must == 0
 func AllLayers(charSet []string, layerSize int, acc *[][]string) int {
 
 		  setLen := len(charSet)
@@ -109,7 +112,8 @@ func unorderedHelp(charSet []string, setLen int, layerSize int, acc *[][]string,
 		  if buffIndex == layerSize {
 					 layer := make([]string, layerSize)
 					 copy(layer, *buff)
-					 *acc = append(*acc, *buff)
+					 *acc = append(*acc, layer)
+					 // Harvest leftovers
 					 return
 		  }
 		  
@@ -123,6 +127,74 @@ func unorderedHelp(charSet []string, setLen int, layerSize int, acc *[][]string,
 		  // Set current buff elem to match next set elem.
 		  unorderedHelp(charSet, setLen, layerSize, acc, buff, buffIndex, setIndex + 1)
 }
+
+// Extra stuff for making full sets of stuff
+type LayerAndExtra struct{
+	Layer *[]string
+	Extra *[]string
+}
+
+// Creates a new slice of only elements in set which are not in layer.
+func sortExclude[K comparable](layer, set []K) []K {
+	output := make([]K, len(set) - len(layer))// this length will be correc tif all elements of layer are present in set
+	for _, v := range(set) {
+		if tfmt.SliceContains(layer, v) { continue }
+		output = append(output, v)
+	}
+	return output
+} 
+
+func AllLayouts(charSet []string, layerSize int) [][][]string {
+
+			var acc [][][]string
+			var tmpAcc [][]string
+		  setLen := len(charSet)
+		  if setLen % layerSize != 0 { return acc }
+		  buff := make([]string, layerSize)
+
+		  leftoverHelper(charSet, setLen, layerSize, &acc, &tmpAcc, &buff, 0, 0)
+
+		  return acc
+}
+
+func leftoverHelper(charSet []string, setLen int, layerSize int, acc *[][][]string, tmpAcc *[][]string, buff *[]string, buffIndex int, setIndex int) {
+
+		  // add current temp buff to acc
+ if buffIndex == layerSize {
+    layer := make([]string, layerSize)
+    copy(layer, *buff)
+		tmpAcc = append(tmpAcc, layer)
+    // Harvest leftovers
+		matchingSet := sortExclude(layer, charSet)
+		mSetLen := len(matchingSet)
+    if mSetLen != 0 && {// The first call is a sequence reuqires a new buffer
+
+		} else if {// if its not the frist in a second depth sequecne, the buffer is already
+		  leftoverHelper(matchingSet, mSetLen, layerSize, acc, tmpAcc, buff, 0, 0)
+		} else {
+			layout := make([][]string, len(*tmpAcc))
+			copy(layout, *tmpAcc)
+			*acc = append(*acc, layout)
+			//reset tempAcc
+		}
+    return
+  }
+		  
+		  // end of the set
+		  if setIndex >= setLen {return}
+
+		  // Set current buff element to match set elem.
+		  (*buff)[buffIndex] = charSet[setIndex]
+		  leftoverHelper(charSet, setLen, layerSize, acc, tmpAcc, buff, buffIndex + 1, setIndex + 1)
+
+		  // Set current buff elem to match next set elem.
+		  leftoverHelper(charSet, setLen, layerSize, acc, tmpAcc, buff, buffIndex, setIndex + 1)
+}
+
+
+
+//Testing brutal method
+
 
 // All possible combinaitons of layers
 func AllLayerMaps(charSet []string, layerSize int, acc *[][][]string) int {
@@ -231,3 +303,8 @@ func allOtherLayers(charSet []string, remainingChars *[]string, depth int, layer
 		  *remainingChars = append(*remainingChars, charSet[setIndex])
 		  allOtherLayers(charSet, remainingChars, depth, layerCount, setLen, layerSize, acc, buff, buffIndex, setIndex + 1)
 }
+
+// Reimple.
+func AllLayerMaps2(charset []string, layerSize uint, acc *[][][]string){}
+func firstLayer(charset []string, skipped *[]string, )
+func otherLayers(charset string){}

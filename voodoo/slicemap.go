@@ -9,7 +9,6 @@ import (
 // Optimization :: Slice keymaps - Is it worth it?
 // a keyman will be a slice of length n*8 where keys 0 through n-1 will have all chars the left pinky uses, n-1 through 2n-1 all keys for left ring, etc
 
-
 func arrFingerUse(block string, fingerMap []string) int {
 		  keys := len(fingerMap)
 		  counter := 0
